@@ -1,5 +1,5 @@
-from i386/ubuntu
-maintainer Robin Appelman <robin@icewind.nl>
+FROM i386/ubuntu
+MAINTAINER Robin Appelman <robin@icewind.nl>
 
 ADD ./install.sh /install.sh
 RUN mkdir /data \
@@ -8,8 +8,8 @@ RUN mkdir /data \
 	&& apt-get install -y wget unzip \
 	&& rm -rf /var/lib/apt/lists/*
 RUN /install.sh
+WORKDIR /data
 
 ADD ./spcomp.sh /spcomp.sh
 
-WORKDIR /data
 ENTRYPOINT ["/spcomp.sh"]

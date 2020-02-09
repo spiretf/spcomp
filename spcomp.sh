@@ -1,18 +1,38 @@
 #! /bin/sh
 
-cp /include/* /scripting/include
+if [ -e "/include/*" ]; then
+  cp /include/* /scripting/include
+fi
 
-/scripting/spcomp $@
+IN=$@
+cd $(dirname $IN)
 
-out="${1%.sp}.smx"
+IN="$(basename $IN)"
+OUT="${IN%.sp}.smx"
 
-chown $(stat -c '%u' $1):$(stat -c '%g' $1) $out
+if [ "$IN" -ot "$OUT" ]; then
+    echo "Compiled file already up to date"
+    return
+fi
+
+if [ ! -z "$OUTPUT" ]; then
+  if [ "$IN" -ot "$OUTPUT" ]; then
+      echo "Compiled file already up to date"
+      return
+  fi
+fi
+
+/scripting/spcomp $IN
+
+OUT="${IN%.sp}.smx"
+
+chown $(stat -c '%u' $IN):$(stat -c '%g' $IN) $OUT
 
 if [ -d "/output" ]; then
-	mv $out /output
+	cp $OUT /output
 fi
 
 if [ ! -z "$OUTPUT" ]
 then
-  cp /output/$out $OUTPUT
+  cp $OUT $OUTPUT
 fi
