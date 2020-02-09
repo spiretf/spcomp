@@ -25,7 +25,7 @@ if [ "$IN" -ot "$OUT" ]; then
     return
 fi
 
-/scripting/spcomp "$IN"
+/scripting/spcomp "$IN" || exit
 
 OUT="${IN%.sp}.smx"
 
