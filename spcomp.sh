@@ -4,16 +4,10 @@ if [ -e "/include/*" ]; then
   cp /include/* /scripting/include
 fi
 
-IN=$@
-cd $(dirname $IN)
+BASEDIR="$(pwd)"
 
-IN="$(basename $IN)"
-OUT="${IN%.sp}.smx"
-
-if [ "$IN" -ot "$OUT" ]; then
-    echo "Compiled file already up to date"
-    return
-fi
+IN=$*
+OUT="$(basename "${IN%.sp}".smx)"
 
 if [ ! -z "$OUTPUT" ]; then
   if [ "$IN" -ot "$OUTPUT" ]; then
@@ -22,11 +16,20 @@ if [ ! -z "$OUTPUT" ]; then
   fi
 fi
 
-/scripting/spcomp $IN
+cd "$(dirname "$IN")" || exit
+
+IN="$(basename "$IN")"
+
+if [ "$IN" -ot "$OUT" ]; then
+    echo "Compiled file already up to date"
+    return
+fi
+
+/scripting/spcomp "$IN"
 
 OUT="${IN%.sp}.smx"
 
-chown $(stat -c '%u' $IN):$(stat -c '%g' $IN) $OUT
+chown $(stat -c '%u' "$IN"):$(stat -c '%g' "$IN") "$OUT"
 
 if [ -d "/output" ]; then
 	cp $OUT /output
@@ -34,5 +37,7 @@ fi
 
 if [ ! -z "$OUTPUT" ]
 then
-  cp $OUT $OUTPUT
+  mv $OUT /tmp/out.smx
+  cd "$BASEDIR"
+  mv /tmp/out.smx $OUTPUT
 fi
