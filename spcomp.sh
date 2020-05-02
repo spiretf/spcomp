@@ -1,6 +1,6 @@
 #! /bin/sh
 
-if [ -e "/include/*" ]; then
+if stat -t /include/* >/dev/null 2>&1; then
   cp /include/* /scripting/include
 fi
 
