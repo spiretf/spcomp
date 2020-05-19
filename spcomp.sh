@@ -32,12 +32,13 @@ OUT="${IN%.sp}.smx"
 chown $(stat -c '%u' "$IN"):$(stat -c '%g' "$IN") "$OUT"
 
 if [ -d "/output" ]; then
-	cp $OUT /output
+  // copy without changing the file node
+	cat $OUT > /output/$OUT
 fi
 
 if [ ! -z "$OUTPUT" ]
 then
   mv $OUT /tmp/out.smx
   cd "$BASEDIR"
-  mv /tmp/out.smx $OUTPUT
+  cat /tmp/out.smx > $OUTPUT
 fi
