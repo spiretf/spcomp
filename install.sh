@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sm_url=$(wget -q -O - "http://www.sourcemod.net/downloads.php?branch=dev" | grep -oE -m1 "https://[a-z.]+/smdrop/[0-9.]+/sourcemod-(.*)-linux.tar.gz")
+sm_url=$(wget -q -O - "http://www.sourcemod.net/downloads.php?branch=stable" | grep -oE -m1 "https://[a-z.]+/smdrop/[0-9.]+/sourcemod-(.*)-linux.tar.gz")
 
 wget -q $sm_url -O sourcemod.tar.gz
 wget -q https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/sourcemod-curl-extension/curl_1.3.0.0_linux.zip -O curl.zip
